@@ -447,12 +447,18 @@ angular.module('ui.mask', [])
                                 var change;
                                 if (angular.isFunction(window.Event) && !element.fireEvent) {
                                     // modern browsers and Edge
-                                    change = new Event('change', {
+                                    try {
+                                      event = new Event('change', {
                                         view: window,
                                         bubbles: true,
                                         cancelable: false
-                                    });
-                                    element.dispatchEvent(change);
+                                        });
+                                      element.dispatchEvent(change);
+                                    } catch(e) {
+                                      event = document.createEvent('Event');
+                                      event.initEvent('change', true, false);
+                                      element.dispatchEvent(change);
+                                    }
                                 } else if ('createEvent' in document) {
                                     // older browsers
                                     change = document.createEvent('HTMLEvents');
