@@ -447,12 +447,20 @@ angular.module('ui.mask', [])
                                 var change;
                                 if (angular.isFunction(window.Event) && !element.fireEvent) {
                                     // modern browsers and Edge
-                                    change = new Event('change', {
+                                    var ua = navigator.userAgent;
+                                    if( ua.indexOf("Android") >= 0 )
+                                    {
+                                      var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
+                                      if (androidversion > 2.3){
+                                        change = new Event('change', {
                                         view: window,
                                         bubbles: true,
                                         cancelable: false
-                                    });
-                                    element.dispatchEvent(change);
+                                        });
+                                        element.dispatchEvent(change);
+                                      }
+                                    }
+                                   
                                 } else if ('createEvent' in document) {
                                     // older browsers
                                     change = document.createEvent('HTMLEvents');
